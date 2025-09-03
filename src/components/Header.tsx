@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import ceubLogo from "/logo-ceub.png";
+import logoTeste from "/logo-teste.png";
 import { useAuth } from "../hooks/useAuth";
 
 const Header = () => {
@@ -16,15 +16,16 @@ const Header = () => {
   const shouldHideMenu = hiddenMenuRoutes.includes(location.pathname);
 
   const navLinks = [
+    { name: "Home" , path: "/home" , allowedRoles: ["aluno"]},
     { name: "Turmas", path: "/turmas", allowedRoles: ["admin", "aluno"] },
     { name: "Nova Turma", path: "/cadastro/turma", allowedRoles: ["admin", "aluno"] },
   ];
 
   return (
-    <header className="bg-[#43054E] text-white w-full px-4 py-3">
+    <header className="bg-[linear-gradient(to_right,_#9A238B_51%,_#340C2F_100%)] text-white w-full px-4 py-3">
       <div className="flex justify-between items-center max-w-5xl mx-auto px-2">
         <div className="flex items-center gap-4">
-          <img src={ceubLogo} alt="CEUB Logo" className="h-12 w-auto" />
+          <img src={logoTeste} alt="CEUB Logo" className="h-12 w-auto" />
           <h1 className="text-white text-xl md:text-2xl font-semibold">
             Núcleo de Esportes
           </h1>

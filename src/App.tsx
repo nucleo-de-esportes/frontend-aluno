@@ -7,6 +7,7 @@ import UserRegister from "./pages/UserRegister";
 import UserLogin from "./pages/UserLogin";
 import ClassView from "./pages/ClassView";
 import ClassEnrollmentForm from './pages/ClassEnrollmentForm'
+import HomePage from './pages/HomePage'
 
 function App() {
   return (
@@ -27,6 +28,18 @@ function App() {
               }
             />
 
+            <Route
+              path="/home"
+              element={
+                <PrivateRoute
+                  allowedTypes={["aluno"]}
+                  elementByType={{
+                    aluno: <HomePage/>
+                  }}
+                />
+              }
+            />
+            
             <Route
               path="/turmas"
               element={
