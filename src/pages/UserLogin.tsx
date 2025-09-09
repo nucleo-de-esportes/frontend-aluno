@@ -49,7 +49,7 @@ const UserLogin = () => {
             )
             
             setTimeout(() => {
-                navigate("/turmas");
+                navigate("/home");
             }, 1500);
         } catch (err) {
             if (axios.isAxiosError(err)) {
