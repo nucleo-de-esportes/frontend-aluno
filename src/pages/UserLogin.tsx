@@ -6,8 +6,8 @@ import { useApiAlert } from "../hooks/useApiAlert";
 import { useAuth } from "../hooks/useAuth";
 import Button from "../components/Button";
 import Form from "../components/Form";
-import Input from "../components/Input";
 import MainContainer from "../components/MainContainer";
+import TextInput from "../components/TextInput"
 
 const emailValidationSchema = z.string().email("Formato de E-mail inválido");
 const passwordValidationSchema = z.string().min(1, "Senha obrigatória");
@@ -15,8 +15,12 @@ const passwordValidationSchema = z.string().min(1, "Senha obrigatória");
 const UserLogin = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
-    const [isEmailValid, setIsEmailValid] = useState(false);
-    const [isPasswordValid, setIsPasswordValid] = useState(false);
+    
+    // Estados para armazenar os erros de validação
+    const [errors, setErrors] = useState<{[key: string]: string | null}>({
+        email: null,
+        password: null
+    });
 
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -26,6 +30,22 @@ const UserLogin = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    
+        if (name === 'email') {
+            const result = emailValidationSchema.safeParse(value);
+            if (result.success) {
+                setErrors(prev => ({ ...prev, email: null }));
+            } else {
+                setErrors(prev => ({ ...prev, email: result.error.errors[0].message }));
+            }
+        } else if (name === 'password') {
+            const result = passwordValidationSchema.safeParse(value);
+            if (result.success) {
+                setErrors(prev => ({ ...prev, password: null }));
+            } else {
+                setErrors(prev => ({ ...prev, password: result.error.errors[0].message }));
+            }
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -67,6 +87,9 @@ const UserLogin = () => {
         }
     };
 
+    const isEmailValid = !errors.email && formData.email.trim() !== '';
+    const isPasswordValid = !errors.password && formData.password.trim() !== '';
+
     const isDisabled =
         loading ||
         !isEmailValid ||
@@ -77,26 +100,29 @@ const UserLogin = () => {
     return (
         <MainContainer>
             <Form title="Núcleo de Esportes" onSubmit={handleSubmit}>
-                <Input
-                    label="Email"
-                    placeholder="Seu email"
+
+                <TextInput
+                    label="E-mail"
+                    type="email"
                     name="email"
-                    type="text"
                     value={formData.email}
                     onChange={handleInputChange}
+                    error={!!errors.email}
+                    helperText={errors.email || undefined}
                     validation={emailValidationSchema}
-                    onValidationChange={setIsEmailValid}
+                    validationError={errors.email}
                 />
 
-                <Input
-                    type="password"
+                <TextInput
                     label="Senha"
-                    placeholder="Sua senha"
+                    type="password"
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
+                    error={!!errors.password}
+                    helperText={errors.password || undefined}
                     validation={passwordValidationSchema}
-                    onValidationChange={setIsPasswordValid}
+                    validationError={errors.password}
                 />
 
                 <a href="/forgot-password" className="text-[#BF0087] underline hover:text-[#43054E] transition mb-8">

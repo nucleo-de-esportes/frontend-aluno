@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useApiAlert } from "../hooks/useApiAlert";
 import Button from "../components/Button";
 import Form from "../components/Form";
-import Input from "../components/Input";
+import TextInput from "../components/TextInput";
 import MainContainer from "../components/MainContainer";
 
 const emailValidationSchema = z.string().email("Formato de E-mail inválido");
@@ -26,9 +26,13 @@ const UserRegister = () => {
         password: ""
     });
     const [loading, setLoading] = useState(false);
-    const [isEmailValid, setIsEmailValid] = useState(false);
-    const [isPasswordValid, setIsPasswordValid] = useState(false);
-    const [isNameValid, setIsNameValid] = useState(false);
+    
+    // Estados para armazenar os erros de validação
+    const [errors, setErrors] = useState<{[key: string]: string | null}>({
+        name: null,
+        email: null,
+        password: null
+    });
     
     const navigate = useNavigate();
     const { showAlert } = useApiAlert();
@@ -36,6 +40,29 @@ const UserRegister = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    
+        if (name === 'name') {
+            const result = nameValidationSchema.safeParse(value);
+            if (result.success) {
+                setErrors(prev => ({ ...prev, name: null }));
+            } else {
+                setErrors(prev => ({ ...prev, name: result.error.errors[0].message }));
+            }
+        } else if (name === 'email') {
+            const result = emailValidationSchema.safeParse(value);
+            if (result.success) {
+                setErrors(prev => ({ ...prev, email: null }));
+            } else {
+                setErrors(prev => ({ ...prev, email: result.error.errors[0].message }));
+            }
+        } else if (name === 'password') {
+            const result = passwordValidationSchema.safeParse(value);
+            if (result.success) {
+                setErrors(prev => ({ ...prev, password: null }));
+            } else {
+                setErrors(prev => ({ ...prev, password: result.error.errors[0].message }));
+            }
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -79,6 +106,11 @@ const UserRegister = () => {
         }
     };
 
+    // Verificar se os campos são válidos
+    const isNameValid = !errors.name && formData.name.trim() !== '';
+    const isEmailValid = !errors.email && formData.email.trim() !== '';
+    const isPasswordValid = !errors.password && formData.password.trim() !== '';
+
     const isDisabled =
         loading ||
         !isEmailValid ||
@@ -91,37 +123,40 @@ const UserRegister = () => {
     return (
         <MainContainer>
             <Form title="Núcleo de Esportes" onSubmit={handleSubmit}>
-                <Input
+                <TextInput
                     label="Nome Completo"
-                    placeholder="Seu nome completo"
                     name="name"
                     type="text"
                     value={formData.name}
-                    validation={nameValidationSchema}
                     onChange={handleInputChange}
-                    onValidationChange={setIsNameValid}
+                    error={!!errors.name}
+                    helperText={errors.name || undefined}
+                    validation={nameValidationSchema}
+                    validationError={errors.name}
                 />
                 
-                <Input
+                <TextInput
                     label="Email"
-                    placeholder="E-mail"
                     name="email"
-                    type="text"
+                    type="email"
                     value={formData.email}
-                    validation={emailValidationSchema}
                     onChange={handleInputChange}
-                    onValidationChange={setIsEmailValid}
+                    error={!!errors.email}
+                    helperText={errors.email || undefined}
+                    validation={emailValidationSchema}
+                    validationError={errors.email}
                 />
 
-                <Input
-                    type="password"
+                <TextInput
                     label="Senha"
-                    placeholder="Senha"
                     name="password"
+                    type="password"
                     value={formData.password}
                     onChange={handleInputChange}
+                    error={!!errors.password}
+                    helperText={errors.password || undefined}
                     validation={passwordValidationSchema}
-                    onValidationChange={setIsPasswordValid}
+                    validationError={errors.password}
                 />
 
                 <div className="flex flex-col w-full items-center gap-2 mt-8">
