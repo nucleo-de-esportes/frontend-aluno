@@ -27,47 +27,28 @@ const UserRegister = () => {
     });
     const [loading, setLoading] = useState(false);
     
-    // Estados para armazenar os erros de validação
-    const [errors, setErrors] = useState<{[key: string]: string | null}>({
-        name: null,
-        email: null,
-        password: null
-    });
-    
     const navigate = useNavigate();
     const { showAlert } = useApiAlert();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-    
-        if (name === 'name') {
-            const result = nameValidationSchema.safeParse(value);
-            if (result.success) {
-                setErrors(prev => ({ ...prev, name: null }));
-            } else {
-                setErrors(prev => ({ ...prev, name: result.error.errors[0].message }));
-            }
-        } else if (name === 'email') {
-            const result = emailValidationSchema.safeParse(value);
-            if (result.success) {
-                setErrors(prev => ({ ...prev, email: null }));
-            } else {
-                setErrors(prev => ({ ...prev, email: result.error.errors[0].message }));
-            }
-        } else if (name === 'password') {
-            const result = passwordValidationSchema.safeParse(value);
-            if (result.success) {
-                setErrors(prev => ({ ...prev, password: null }));
-            } else {
-                setErrors(prev => ({ ...prev, password: result.error.errors[0].message }));
-            }
-        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+
+        // Validação final antes do envio
+        const nameResult = nameValidationSchema.safeParse(formData.name);
+        const emailResult = emailValidationSchema.safeParse(formData.email);
+        const passwordResult = passwordValidationSchema.safeParse(formData.password);
+
+        if (!nameResult.success || !emailResult.success || !passwordResult.success) {
+            showAlert('error', 'Por favor, corrija os erros no formulário antes de enviar.', 'Erro de Validação');
+            setLoading(false);
+            return;
+        }
 
         try {
             await axios.post(import.meta.env.VITE_API_URL + "/user/register", {
@@ -106,19 +87,16 @@ const UserRegister = () => {
         }
     };
 
-    // Verificar se os campos são válidos
-    const isNameValid = !errors.name && formData.name.trim() !== '';
-    const isEmailValid = !errors.email && formData.email.trim() !== '';
-    const isPasswordValid = !errors.password && formData.password.trim() !== '';
+    // Verificar se todos os campos são válidos para habilitar o botão
+    const isFormValid = () => {
+        const nameResult = nameValidationSchema.safeParse(formData.name);
+        const emailResult = emailValidationSchema.safeParse(formData.email);
+        const passwordResult = passwordValidationSchema.safeParse(formData.password);
+        
+        return nameResult.success && emailResult.success && passwordResult.success;
+    };
 
-    const isDisabled =
-        loading ||
-        !isEmailValid ||
-        !isPasswordValid ||
-        !isNameValid ||
-        !formData.email.trim() ||
-        !formData.password.trim() ||
-        !formData.name.trim();
+    const isDisabled = loading || !isFormValid();
 
     return (
         <MainContainer>
@@ -129,10 +107,7 @@ const UserRegister = () => {
                     type="text"
                     value={formData.name}
                     onChange={handleInputChange}
-                    error={!!errors.name}
-                    helperText={errors.name || undefined}
                     validation={nameValidationSchema}
-                    validationError={errors.name}
                 />
                 
                 <TextInput
@@ -141,10 +116,7 @@ const UserRegister = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    error={!!errors.email}
-                    helperText={errors.email || undefined}
                     validation={emailValidationSchema}
-                    validationError={errors.email}
                 />
 
                 <TextInput
@@ -153,10 +125,7 @@ const UserRegister = () => {
                     type="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    error={!!errors.password}
-                    helperText={errors.password || undefined}
                     validation={passwordValidationSchema}
-                    validationError={errors.password}
                 />
 
                 <div className="flex flex-col w-full items-center gap-2 mt-8">

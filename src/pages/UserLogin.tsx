@@ -15,12 +15,6 @@ const passwordValidationSchema = z.string().min(1, "Senha obrigatória");
 const UserLogin = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
-    
-    // Estados para armazenar os erros de validação
-    const [errors, setErrors] = useState<{[key: string]: string | null}>({
-        email: null,
-        password: null
-    });
 
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -30,27 +24,20 @@ const UserLogin = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-    
-        if (name === 'email') {
-            const result = emailValidationSchema.safeParse(value);
-            if (result.success) {
-                setErrors(prev => ({ ...prev, email: null }));
-            } else {
-                setErrors(prev => ({ ...prev, email: result.error.errors[0].message }));
-            }
-        } else if (name === 'password') {
-            const result = passwordValidationSchema.safeParse(value);
-            if (result.success) {
-                setErrors(prev => ({ ...prev, password: null }));
-            } else {
-                setErrors(prev => ({ ...prev, password: result.error.errors[0].message }));
-            }
-        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+
+        // Validar os dados antes de enviar
+        const emailResult = emailValidationSchema.safeParse(formData.email);
+        const passwordResult = passwordValidationSchema.safeParse(formData.password);
+
+        if (!emailResult.success || !passwordResult.success) {
+            setLoading(false);
+            return;
+        }
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/user/login`, {
@@ -87,8 +74,9 @@ const UserLogin = () => {
         }
     };
 
-    const isEmailValid = !errors.email && formData.email.trim() !== '';
-    const isPasswordValid = !errors.password && formData.password.trim() !== '';
+    // Verificar se os campos são válidos para habilitar/desabilitar o botão
+    const isEmailValid = emailValidationSchema.safeParse(formData.email).success;
+    const isPasswordValid = passwordValidationSchema.safeParse(formData.password).success;
 
     const isDisabled =
         loading ||
@@ -107,10 +95,7 @@ const UserLogin = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    error={!!errors.email}
-                    helperText={errors.email || undefined}
                     validation={emailValidationSchema}
-                    validationError={errors.email}
                 />
 
                 <TextInput
@@ -119,10 +104,7 @@ const UserLogin = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    error={!!errors.password}
-                    helperText={errors.password || undefined}
                     validation={passwordValidationSchema}
-                    validationError={errors.password}
                 />
 
                 <a href="/forgot-password" className="text-[#BF0087] underline hover:text-[#43054E] transition mb-8">

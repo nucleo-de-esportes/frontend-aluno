@@ -22,13 +22,10 @@ interface CustomTextFieldProps {
     name: string;
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    error?: boolean;
-    helperText?: string;
     type?: string;
     fullWidth?: boolean;
     variant?: TextFieldVariants;
     validation?: z.ZodString;
-    validationError?: string | null;
 }
 
 export default function CustomTextField({
@@ -36,24 +33,20 @@ export default function CustomTextField({
     name,
     value,
     onChange,
-    error,
-    helperText,
     type = "text",
     fullWidth = true,
     variant = "outlined",
     validation,
-    validationError,
     ...props
 }: CustomTextFieldProps) {
     const [showPassword, setShowPassword] = useState(false);
 
     const checkValidationRules = (
         checks: ZodStringCheck[],
-        inputValue: string,
-        hasError: boolean
+        inputValue: string
     ): { isMet: boolean; text: string; key: string }[] => {
         return checks.map((check, index) => {
-            const text = check.message || `Regra ${check.kind || index + 1}`;
+            let text = check.message || `Regra ${check.kind || index + 1}`;
             let isMet = false;
 
             if (check.kind === "min" && typeof check.value === "number") {
@@ -65,8 +58,17 @@ export default function CustomTextField({
             } else if (check.kind === "email") {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 isMet = emailRegex.test(inputValue);
+                
+                // Definir mensagem específica para email baseada no estado
+                if (isMet) {
+                    text = "E-mail válido";
+                } else {
+                    text = "Formato de e-mail inválido";
+                }
             } else {
-                isMet = !hasError;
+                // Para regras genéricas, validar usando o schema completo
+                const result = validation?.safeParse(inputValue);
+                isMet = result?.success || false;
             }
 
             return { isMet, text, key: `${check.kind}-${index}` };
@@ -74,7 +76,7 @@ export default function CustomTextField({
     };
 
     const checks = validation?._def?.checks ?? [];
-    const rules = checkValidationRules(checks, value, !!validationError);
+    const rules = checkValidationRules(checks, value);
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -83,8 +85,6 @@ export default function CustomTextField({
                 name={name}
                 value={value}
                 onChange={onChange}
-                error={error}
-                helperText={helperText}
                 type={type === "password" && !showPassword ? "password" : "text"}
                 fullWidth={fullWidth}
                 variant={variant}
