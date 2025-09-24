@@ -10,8 +10,8 @@ export default function HomePage() {
     return(
         <MainContainer>
             <main>
-                <div className='flex flex-col gap-5'>   
-                    <div className='flex justify-center'>
+                <div className='flex flex-col gap-5 w-full h-full p-8 md:px-36'>   
+                    <div className='flex justify-center mb-4'>
                         <p><b>BEM VINDO, {user?.name.toString().toUpperCase()}!</b></p>
                    </div>
                    <div className='flex flex-row gap-5'>

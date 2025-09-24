@@ -7,6 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   minWidth?: string;
   showCheckbox?: boolean;
   color?: string;
+  onStateChange?: (state: { checked: boolean }) => void; // NOVA PROP
 }
 
 const Button = ({
@@ -15,6 +16,7 @@ const Button = ({
   type = "button",
   showCheckbox = false,
   onClick,
+  onStateChange,
   ...props
 }: ButtonProps) => {
   const [checked, setChecked] = useState(false);
@@ -25,17 +27,24 @@ const Button = ({
     lg: "px-8 py-4 text-lg",
   };
 
+  const toggleChecked = () => {
+    setChecked((prev) => {
+      const newValue = !prev;
+      if (onStateChange) {
+        onStateChange({ checked: newValue });
+      }
+      return newValue;
+    });
+  };
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Se o clique foi no input checkbox, deixa o onChange do input cuidar do estado
     if ((e.target as HTMLElement).tagName.toLowerCase() === "input") {
-      // só repassa o onClick, sem mexer no checked
       if (onClick) onClick(e);
       return;
     }
     
-    // se o clique foi fora do checkbox, alterna o checked
     if (showCheckbox) {
-      setChecked((prev) => !prev);
+      toggleChecked();
     }
     
     if (onClick) {
@@ -69,7 +78,7 @@ const Button = ({
           <input
             type="checkbox"
             checked={checked}
-            onChange={() => setChecked(!checked)}
+            onChange={toggleChecked}
             className="absolute opacity-0 w-5 h-5 cursor-pointer pointer-events-none"
           />
           <span

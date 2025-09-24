@@ -37,14 +37,12 @@ const RoboticsCompetition = () => {
 
   return (
     <div className="max-w-lg mx-auto bg-white rounded-2xl border-2 border-gray-300 overflow-hidden shadow-lg">
-      {/* Header */}
       <div className="bg-white text-center pt-6 pb-2">
         <h1 className="text-2xl font-bold text-gray-800 tracking-wider">
           NOTÍCIAS
         </h1>
       </div>
 
-      {/* Main Content */}
       <div className="px-6 pb-6">
         <div className="text-center mb-4">
           <h2 className="text-xl font-bold text-gray-800 mb-2">
@@ -55,28 +53,28 @@ const RoboticsCompetition = () => {
           </p>
         </div>
 
-        {/* Image Container with Navigation */}
+
         <div className="relative">
-          {/* Left Arrow */}
-          <button onClick={prevSlide} className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-[#9A238B] hover:scale-102 active:scale-98 text-white rounded-full p-2 shadow-lg">
+
+          <button onClick={prevSlide} className="absolute right-80 top-1/2 transform -translate-y-1/2 z-10 bg-[#9A238B] hover:scale-102 active:scale-98 text-white rounded-full p-2 shadow-lg">
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          {/* Right Arrow */}
-          <button onClick={nextSlide} className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-[#9A238B] hover:scale-102 active:scale-98 text-white rounded-full p-2 shadow-lg">
+
+          <button onClick={nextSlide} className="absolute left-80 top-1/2 transform -translate-y-1/2 z-10 bg-[#9A238B] hover:scale-102 active:scale-98 text-white rounded-full p-2 shadow-lg">
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Image */}
+ 
           <div className="mx-8 rounded-lg overflow-hidden shadow-md">
             <div className="bg-gradient-to-br from-blue-500 to-indigo-600 h-48 flex items-center justify-center relative">
-              {/* Mock robotics competition scene */}
+
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-600/20"></div>
               
-              {/* Dynamic content based on current slide */}
+
               {currentSlide === 0 && (
                 <div className="relative z-10 flex items-center justify-center space-x-4">
-                  {/* Competition scene with people and robots */}
+ 
                   <div className="bg-green-500 w-12 h-16 rounded-t-full rounded-b-lg relative">
                     <div className="bg-yellow-400 w-8 h-8 rounded-full absolute -top-2 left-2"></div>
                   </div>
@@ -98,7 +96,7 @@ const RoboticsCompetition = () => {
 
               {currentSlide === 1 && (
                 <div className="relative z-10 flex items-center justify-center space-x-6">
-                  {/* Innovation and technology scene */}
+
                   <div className="bg-cyan-400 w-20 h-12 rounded-lg relative">
                     <div className="bg-white w-4 h-4 rounded absolute top-2 left-2"></div>
                     <div className="bg-yellow-400 w-3 h-3 rounded absolute top-3 right-2"></div>
@@ -120,7 +118,7 @@ const RoboticsCompetition = () => {
 
               {currentSlide === 2 && (
                 <div className="relative z-10 flex items-center justify-center space-x-3">
-                  {/* Networking scene with more people */}
+
                   <div className="bg-red-500 w-10 h-14 rounded-t-full rounded-b-lg relative">
                     <div className="bg-yellow-300 w-6 h-6 rounded-full absolute -top-1 left-2"></div>
                   </div>
@@ -143,27 +141,27 @@ const RoboticsCompetition = () => {
                 </div>
               )}
 
-              {/* Table/Competition surface */}
+
               <div className="absolute bottom-0 left-0 right-0 bg-white/20 h-8"></div>
             </div>
           </div>
         </div>
 
-        {/* Description */}
+
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600 leading-relaxed">
             {currentSlideData.description}
           </p>
         </div>
 
-        {/* Slide Indicators */}
+
         <div className="flex justify-center mt-4 space-x-2">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentSlide ? 'bg-purple-600' : 'bg-gray-300'
+                index === currentSlide ? 'bg-[#9A238B]  ' : 'bg-gray-300'
               }`}
             />
           ))}
