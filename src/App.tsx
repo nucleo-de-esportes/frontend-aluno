@@ -8,6 +8,7 @@ import UserLogin from "./pages/UserLogin";
 import ClassView from "./pages/ClassView";
 import ClassEnrollmentForm from './pages/ClassEnrollmentForm'
 import HomePage from './pages/HomePage'
+import AvisosPage from "./pages/AvisosPage";
 
 function App() {
   return (
@@ -47,6 +48,17 @@ function App() {
                   allowedTypes={["aluno"]}
                   elementByType={{
                     aluno: <ClassView />,
+                  }}
+                />
+              }
+            />
+            <Route
+              path="/avisos"
+              element={
+                <PrivateRoute
+                  allowedTypes={["aluno"]}
+                  elementByType={{
+                    aluno: <AvisosPage />,
                   }}
                 />
               }

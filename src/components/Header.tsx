@@ -19,6 +19,7 @@ const Header = () => {
     { name: "Home" , path: "/home" , allowedRoles: ["aluno"]},
     { name: "Turmas", path: "/turmas", allowedRoles: ["admin", "aluno"] },
     { name: "Nova Turma", path: "/cadastro/turma", allowedRoles: ["admin", "aluno"] },
+    { name: "Avisos", path: "/avisos", allowedRoles: ["aluno"] },
   ];
 
   return (
