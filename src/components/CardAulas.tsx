@@ -51,6 +51,9 @@ const CronogramaAulas = () => {
         <Button
         text="CONFIRMAR PRESENÇA"
         showCheckbox={true}
+        onStateChange={(state) => {
+        console.log("Mudança de estado:", state);
+        }}
         />
       </div>
     </div>
