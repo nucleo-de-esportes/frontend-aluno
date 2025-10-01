@@ -103,7 +103,7 @@ export default function ClassViewUser() {
 
     return (
         <MainContainer>
-            <div className="p-8">
+            <div className="flex flex-col min-h-full p-8">
                 <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-2 sm:gap-0">
                     <Title title='TURMAS DISPONÍVEIS' />
                     <div className="flex gap-2 w-full sm:w-auto">
@@ -123,15 +123,7 @@ export default function ClassViewUser() {
                     isOpen={filtroAberto}
                     onToggleFilter={(isOpen) => setFiltroAberto(isOpen)}
                 />
-
-                {turmasFiltradas.length === 0 && !loading && (
-                    <div className="text-center py-10">
-                        <p className="text-gray-500 text-lg">Nenhuma turma encontrada.</p>
-                        <p className="text-gray-400">Tente ajustar os filtros para encontrar turmas disponíveis.</p>
-                    </div>
-                )}
-
-                <div className="space-y-4 mt-4">
+                <div className="space-y-4 mt-4 flex-grow">
                     {turmasFiltradas.map((turma) => (
                         <ClassCard
                             key={turma.turma_id}
