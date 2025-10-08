@@ -20,8 +20,8 @@ export default function Avisos() {
   ];
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen p-8 w-full">
+      <div className="w-full mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-8">AVISOS</h1>
         
         <div className="bg-white rounded-lg border-2 border-gray-300 p-8">

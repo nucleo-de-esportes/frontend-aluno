@@ -5,9 +5,7 @@ export default function HomePage() {
 
     return(
         <MainContainer>
-            <main>
-                <Avisos/>
-            </main>
+            <Avisos/>
         </MainContainer>
     )
 }
