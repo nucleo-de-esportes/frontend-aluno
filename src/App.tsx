@@ -14,7 +14,7 @@ function App() {
   return (
     <AuthProvider>
       <AlertProvider>
-        <Router>
+        <Router basename="/aluno">
           <Routes>
             <Route path="/" element={<UserLogin />} />
             <Route
