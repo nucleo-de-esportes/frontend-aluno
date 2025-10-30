@@ -1,10 +1,7 @@
 import MainContainer from '../components/MainContainer';
-import { useAuth } from "../hooks/useAuth";
 import Carrosel from "../components/Carrosel"
 import CardAulas from "../components/CardAulas"
-
 export default function HomePage() {
-
 
     return(
         <MainContainer>
