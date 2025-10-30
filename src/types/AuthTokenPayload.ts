@@ -1,6 +1,7 @@
 export interface AuthTokenPayload {
     sub: string;
     email: string;
+    user_type: "aluno" | "professor" | "admin";
     exp: number;
     iat: number;
     aud: string;
