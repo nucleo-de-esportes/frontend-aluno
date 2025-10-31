@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react"; 
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.ElementType;
@@ -7,7 +7,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   minWidth?: string;
   showCheckbox?: boolean;
   color?: string;
-  onStateChange?: (state: { checked: boolean }) => void; // NOVA PROP
+  checked?: boolean; 
+  onStateChange?: (state: { checked: boolean }) => void;
 }
 
 const Button = ({
@@ -15,12 +16,13 @@ const Button = ({
   color = "#9A238B",
   type = "button",
   showCheckbox = false,
+  checked = false, 
   onClick,
   onStateChange,
   ...props
 }: ButtonProps) => {
-  const [checked, setChecked] = useState(false);
-  
+
+
   const sizeStyles = {
     sm: "px-3 py-2 text-sm",
     md: "px-6 py-3 text-base",
@@ -28,13 +30,10 @@ const Button = ({
   };
 
   const toggleChecked = () => {
-    setChecked((prev) => {
-      const newValue = !prev;
-      if (onStateChange) {
-        onStateChange({ checked: newValue });
-      }
-      return newValue;
-    });
+
+    if (onStateChange) {
+      onStateChange({ checked: !checked }); 
+    }
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,12 +41,12 @@ const Button = ({
       if (onClick) onClick(e);
       return;
     }
-    
+
     if (showCheckbox) {
       toggleChecked();
     }
-    
-    if (onClick) {
+
+    if (onClick && !showCheckbox) {
       onClick(e);
     }
   };
@@ -58,7 +57,11 @@ const Button = ({
       onClick={handleClick}
       className={`
         ${props.className || ""}
-        ${props.disabled ? "opacity-60 cursor-not-allowed" : "hover:scale-102 active:scale-98"}
+        ${
+          props.disabled
+            ? "opacity-60 cursor-not-allowed"
+            : "hover:scale-102 active:scale-98"
+        }
         flex items-center justify-center gap-2 text-white ${sizeStyles[size]} 
         font-semibold rounded-lg 
         shadow-md transition-transform transform 
@@ -71,13 +74,15 @@ const Button = ({
       }}
       disabled={props.disabled}
     >
-      {props.icon && <span className="icon">{React.createElement(props.icon)}</span>}
+      {props.icon && (
+        <span className="icon">{React.createElement(props.icon)}</span>
+      )}
       {props.text}
       {showCheckbox && (
         <label className="relative flex items-center cursor-pointer ml-2 pointer-events-none">
           <input
             type="checkbox"
-            checked={checked}
+            checked={checked} 
             onChange={toggleChecked}
             className="absolute opacity-0 w-5 h-5 cursor-pointer pointer-events-none"
           />
@@ -90,7 +95,7 @@ const Button = ({
               pointer-events-none
             `}
           >
-            {checked && (
+            {checked && ( 
               <svg
                 className="w-4 h-4 text-white pointer-events-none"
                 fill="none"
@@ -99,9 +104,9 @@ const Button = ({
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M5 13l4 4L19 7"
                   className="pointer-events-none"
                 />
