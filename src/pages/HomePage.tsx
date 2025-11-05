@@ -9,7 +9,7 @@ export default function HomePage() {
                 <div className='flex flex-col gap-5 w-full h-full p-8 md:px-36'>   
                     <div className='flex justify-center mb-4'>
                    </div>
-                   <div className='flex flex-row gap-5'>
+                   <div className='flex flex-row gap-5 items-start'>
                         <Carrosel/>
                         <CardAulas/>
                    </div>
