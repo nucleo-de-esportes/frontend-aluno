@@ -49,7 +49,7 @@ const RoboticsCompetition = () => {
     const currentSlideData = slides[currentSlide];
 
   return (
-    <div className="max-w-lg mx-auto bg-white rounded-2xl border-2 border-gray-300 overflow-hidden shadow-lg h-[32rem] flex flex-col">
+    <div className="w-lg mx-auto bg-white rounded-2xl border-2 border-gray-300 overflow-hidden shadow-lg h-[32rem] flex flex-col">
       <div className="bg-white text-center pt-6 pb-2">
         <h1 className="text-2xl font-bold text-gray-800 tracking-wider">
           NOTÍCIAS
@@ -70,20 +70,14 @@ const RoboticsCompetition = () => {
 
           <div className="relative">
 
-            {/* --- CORREÇÃO AQUI --- */}
-            {/* Movido de 'left-2' para 'left-0' */}
             <button onClick={prevSlide} className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#9A238B] hover:scale-102 active:scale-98 text-white rounded-full p-2 shadow-lg">
               <ChevronLeft className="w-6 h-6" />
             </button>
 
-            {/* --- CORREÇÃO AQUI --- */}
-            {/* Movido de 'right-2' para 'right-0' */}
             <button onClick={nextSlide} className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#9A238B] hover:scale-102 active:scale-98 text-white rounded-full p-2 shadow-lg">
               <ChevronRight className="w-6 h-6" />
             </button>
 
-            {/* --- CORREÇÃO AQUI --- */}
-            {/* Aumentada a margem de 'mx-8' (2rem) para 'mx-12' (3rem) */}
             <div className="mx-12 rounded-lg overflow-hidden shadow-md">
               <div className="bg-gradient-to-br from-blue-500 to-indigo-600 h-48 flex items-center justify-center relative">
 

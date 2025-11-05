@@ -42,7 +42,6 @@ const CardAulas = () => {
     if (!user) return;
 
     const fetchAulas = async () => {
-      setLoading(true);
       try {
         const dateStr = formatarDataISO(selectedDate);
         const response = await axios.get(
@@ -56,7 +55,7 @@ const CardAulas = () => {
         console.error("Erro ao buscar aulas:", error);
         setAulas([]);
       } finally {
-        setLoading(false);
+        if(loading) setLoading(false);
       }
     };
 
@@ -130,37 +129,37 @@ const CardAulas = () => {
   };
 
   return (
-    <div className="bg-white border-2 border-gray-300 rounded-2xl p-6 w-64 mx-auto font-sans shadow-lg">
+    <div className="bg-white border-2 border-gray-300 rounded-2xl p-6 w-64 mx-auto font-sans shadow-lg h-[32rem] flex flex-col">
       <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
         AULAS
       </h1>
       
-      <div className="space-y-4">
-        {DIAS_SEMANA.map((diaLabel, index) => {
-            const isSelected = index === selectedDayIndex;
-            
-            return (
-                <div 
-                    key={diaLabel}
-                    className="flex items-start space-x-3 cursor-pointer"
-                    onClick={() => handleSelectDay(index)}
-                >
-                    <div className={`
-                        flex-shrink-0
-                        px-2 py-1 rounded text-sm font-semibold w-12 text-center
-                        ${isSelected ? "bg-[#9A238B] text-white" : "text-gray-800"}
-                    `}>
-                        {diaLabel}
-                    </div>
-                    
-                    {isSelected && (
-                        <div className="flex-1 min-w-0">
-                            {renderAulasDoDia()}
-                        </div>
-                    )}
-                </div>
-            );
-        })}
+      <div className="flex flex-row space-x-3 flex-1 min-h-0">
+        
+        <div className="space-y-4">
+          {DIAS_SEMANA.map((diaLabel, index) => {
+              const isSelected = index === selectedDayIndex;
+              
+              return (
+                  <div 
+                      key={diaLabel}
+                      className={`
+                          flex-shrink-0
+                          px-2 py-1 rounded text-sm font-semibold w-12 text-center
+                          cursor-pointer
+                          ${isSelected ? "bg-[#9A238B] text-white" : "text-gray-800"}
+                      `}
+                      onClick={() => handleSelectDay(index)}
+                  >
+                      {diaLabel}
+                  </div>
+              );
+          })}
+        </div>
+        
+        <div className="flex-1 min-w-0 overflow-y-auto">
+            {renderAulasDoDia()}
+        </div>
       </div>
     </div>
   );
