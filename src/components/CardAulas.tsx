@@ -129,7 +129,7 @@ const CardAulas = () => {
   };
 
   return (
-    <div className="bg-white border-2 border-gray-300 rounded-2xl p-6 w-64 mx-auto font-sans shadow-lg h-[32rem] flex flex-col">
+    <div className="bg-white border-2 border-gray-300 rounded-2xl p-6 w-full md:w-[30%] mx-auto font-sans shadow-lg md:flex-grow flex flex-col">
       <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
         AULAS
       </h1>

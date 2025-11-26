@@ -49,7 +49,7 @@ const RoboticsCompetition = () => {
     const currentSlideData = slides[currentSlide];
 
   return (
-    <div className="w-lg mx-auto bg-white rounded-2xl border-2 border-gray-300 overflow-hidden shadow-lg h-[32rem] flex flex-col">
+    <div className="w-full md:w-[70%] mx-auto bg-white rounded-2xl border-2 border-gray-300 overflow-hidden shadow-lg md:flex-grow flex flex-col">
       <div className="bg-white text-center pt-6 pb-2">
         <h1 className="text-2xl font-bold text-gray-800 tracking-wider">
           NOTÍCIAS
