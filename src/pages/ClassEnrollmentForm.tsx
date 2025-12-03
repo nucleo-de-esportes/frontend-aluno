@@ -43,10 +43,10 @@ const ClassEnrollmentForm: React.FC<ClassEnrollmentFormProps> = ({ onBack }) => 
       
       // Extrair modalidades únicas das turmas
       const modalidadesUnicas = Array.from(
-        new Set(response.data.map(turma => turma.modalidade))
+        new Set(response.data.map(turma => turma.modalidade.nome))
       ).map((modalidade, index) => ({
         id: index + 1,
-        nome: modalidade
+        nome: modalidade,
       }));
       
       setModalidades(modalidadesUnicas);
@@ -77,7 +77,7 @@ const ClassEnrollmentForm: React.FC<ClassEnrollmentFormProps> = ({ onBack }) => 
     try {
       // Simula um pequeno delay para mostrar o loading
       setTimeout(() => {
-        const turmasFiltradas = allTurmas.filter(turma => turma.modalidade === modalidadeNome);
+        const turmasFiltradas = allTurmas.filter(turma => turma.modalidade.nome === modalidadeNome);
         setTurmas(turmasFiltradas);
         setLoading(false);
       }, 300);
@@ -330,7 +330,7 @@ const ClassEnrollmentForm: React.FC<ClassEnrollmentFormProps> = ({ onBack }) => 
                             {formatDiasSemana(turma.dia_semana).join(', ')}
                           </p>
                           <p className="text-sm text-gray-600">
-                            Local: {turma.local}
+                            Local: {turma.local.nome}
                           </p>
                           <p className="text-sm text-green-600 mt-1">
                             {turma.limite_inscritos} vagas disponíveis

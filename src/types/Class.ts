@@ -5,6 +5,13 @@ export interface Turma {
     limite_inscritos: number;
     dia_semana: string;
     sigla: string;
-    local: string;
-    modalidade: string;
+    local: {
+        nome: string;
+        campus: string;
+    };
+    modalidade: {
+        nome: string;
+        valor_aluno: string;
+        valor_professor: string;
+    };
 }
