@@ -1,31 +1,21 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { Turma } from '../types/Class';
 
 interface FiltroDeTurmasProps {
     turmas?: Turma[];
     onChange?: (turmasFiltradas: Turma[]) => void;
-    hideButton?: boolean; 
-    isOpen?: boolean; 
-    onToggleFilter?: (isOpen: boolean) => void; 
+    hideButton?: boolean;
+    isOpen?: boolean;
+    onToggleFilter?: (isOpen: boolean) => void;
   }
 
-interface Turma {
-  turma_id: number;
-  horario_inicio: string;
-  horario_fim: string;
-  limite_inscritos: number;
-  dia_semana: string;
-  sigla: string;
-  local: string;
-  modalidade: string;
-}
-
 const turmasExemplo: Turma[] = [
-  { turma_id: 1, horario_inicio: '08:00', horario_fim: '09:30', limite_inscritos: 25, dia_semana: 'Segunda', sigla: 'MAT101', local: 'Sala 101', modalidade: 'Presencial' },
-  { turma_id: 2, horario_inicio: '10:00', horario_fim: '11:30', limite_inscritos: 20, dia_semana: 'Terça', sigla: 'FIS202', local: 'Laboratório', modalidade: 'Híbrida' },
-  { turma_id: 3, horario_inicio: '13:00', horario_fim: '14:30', limite_inscritos: 30, dia_semana: 'Quarta', sigla: 'PORT103', local: 'Sala 203', modalidade: 'Online' },
-  { turma_id: 4, horario_inicio: '15:00', horario_fim: '16:30', limite_inscritos: 40, dia_semana: 'Quinta', sigla: 'HIST104', local: 'Auditório', modalidade: 'Presencial' },
-  { turma_id: 5, horario_inicio: '17:00', horario_fim: '18:30', limite_inscritos: 25, dia_semana: 'Sexta', sigla: 'GEO105', local: 'Sala 101', modalidade: 'Online' },
+  { turma_id: 1, horario_inicio: '08:00', horario_fim: '09:30', limite_inscritos: 25, dia_semana: 'Segunda', sigla: 'MAT101', local: { nome: 'Sala 101', campus: 'Campus A' }, modalidade: { nome: 'Presencial', valor_aluno: '100', valor_professor: '200' } },
+  { turma_id: 2, horario_inicio: '10:00', horario_fim: '11:30', limite_inscritos: 20, dia_semana: 'Terça', sigla: 'FIS202', local: { nome: 'Laboratório', campus: 'Campus B' }, modalidade: { nome: 'Híbrida', valor_aluno: '80', valor_professor: '150' } },
+  { turma_id: 3, horario_inicio: '13:00', horario_fim: '14:30', limite_inscritos: 30, dia_semana: 'Quarta', sigla: 'PORT103', local: { nome: 'Sala 203', campus: 'Campus A' }, modalidade: { nome: 'Online', valor_aluno: '60', valor_professor: '120' } },
+  { turma_id: 4, horario_inicio: '15:00', horario_fim: '16:30', limite_inscritos: 40, dia_semana: 'Quinta', sigla: 'HIST104', local: { nome: 'Auditório', campus: 'Campus C' }, modalidade: { nome: 'Presencial', valor_aluno: '100', valor_professor: '200' } },
+  { turma_id: 5, horario_inicio: '17:00', horario_fim: '18:30', limite_inscritos: 25, dia_semana: 'Sexta', sigla: 'GEO105', local: { nome: 'Sala 101', campus: 'Campus A' }, modalidade: { nome: 'Online', valor_aluno: '60', valor_professor: '120' } },
 ];
 
 function FiltroDeTurmas({ 
@@ -97,8 +87,8 @@ function FiltroDeTurmas({
 
   const opcoesUnicas: FiltroOptions = {
     dias_semana: [...new Set(dadosParaFiltro.map(t => t.dia_semana))],
-    locais: [...new Set(dadosParaFiltro.map(t => t.local))],
-    modalidades: [...new Set(dadosParaFiltro.map(t => t.modalidade))],
+    locais: [...new Set(dadosParaFiltro.map(t => t.local.nome))],
+    modalidades: [...new Set(dadosParaFiltro.map(t => t.modalidade.nome))],
     siglas: [...new Set(dadosParaFiltro.map(t => t.sigla))],
     faixas_horario: faixasHorarioPredefinidas.map(fh => fh.label),
     capacidades: faixasCapacidadePredefinidas.map(fc => fc.label)
@@ -159,11 +149,11 @@ function FiltroDeTurmas({
     }
     
     if (filtros.locais.length > 0) {
-      resultado = resultado.filter(t => filtros.locais.includes(t.local));
+      resultado = resultado.filter(t => filtros.locais.includes(t.local.nome));
     }
-    
+
     if (filtros.modalidades.length > 0) {
-      resultado = resultado.filter(t => filtros.modalidades.includes(t.modalidade));
+      resultado = resultado.filter(t => filtros.modalidades.includes(t.modalidade.nome));
     }
     
     if (filtros.faixas_horario.length > 0) {

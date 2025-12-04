@@ -38,7 +38,11 @@ const ClassEnrollmentForm: React.FC<ClassEnrollmentFormProps> = ({ onBack }) => 
     try {
       setInitialLoading(true);
       const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.get<Turma[]>(`${apiUrl}/turmas`);
+      const response = await axios.get<Turma[]>(`${apiUrl}/turmas`, {
+        headers: {
+          'Authorization': `Bearer ${user?.token}`
+        }
+      });
       setAllTurmas(response.data);
       
       // Extrair modalidades únicas das turmas

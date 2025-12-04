@@ -13,7 +13,8 @@ import { Turma } from '../types/Class';
 import { useAuth } from '../hooks/useAuth';
 
 interface response {
-    turmas: Turma[]
+    turmas_inscritas: Turma[]
+    turmas_ministradas: Turma[]
 }
 
 export default function ClassViewUser() {
@@ -39,15 +40,8 @@ export default function ClassViewUser() {
             }
           });
 
-            const turmasProcessadas = response.data.turmas.map(turma => ({
-                ...turma,
-                local: typeof turma.local === 'object' && turma.local !== null ? (turma.local as { nome: string }).nome : turma.local,
-                modalidade: typeof turma.modalidade === 'object' && turma.modalidade !== null ? (turma.modalidade as { nome: string }).nome : turma.modalidade,
-            })) as Turma[];
-
-
-            setTurmas(turmasProcessadas);
-            setTurmasFiltradas(turmasProcessadas);
+            setTurmas(response.data.turmas_inscritas);
+            setTurmasFiltradas(response.data.turmas_inscritas);
         } catch (err) {
             console.error("Erro ao buscar turmas:", err);
             if (axios.isAxiosError(err)) {

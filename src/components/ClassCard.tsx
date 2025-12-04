@@ -20,10 +20,10 @@ const ClassCard = ({ turma, onEditar }: ClassCardProps) => {
         <div className="w-full border border-gray-200 rounded p-4 mb-4 flex justify-between items-center">
             <div>
                 <h3 className="text-[#43054E] font-medium text-lg">
-                    {turma.modalidade} - {turma.sigla}
+                    {turma.modalidade.nome} - {turma.sigla}
                 </h3>
                 <p className="text-gray-700">
-                    {turma.local}, {diasFormatados} {turma.horario_inicio} - {turma.horario_fim}
+                    {turma.local.nome}, {diasFormatados} {turma.horario_inicio} - {turma.horario_fim}
                 </p>
             </div>
             {onEditar && (
